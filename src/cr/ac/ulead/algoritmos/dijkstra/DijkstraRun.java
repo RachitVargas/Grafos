@@ -1,10 +1,7 @@
 package cr.ac.ulead.algoritmos.dijkstra;
-
-import jdk.internal.org.objectweb.asm.Handle;
-
 public class DijkstraRun {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
         int matriz[][] = {
 
@@ -26,6 +23,7 @@ public class DijkstraRun {
                 }
             }
         }
+
         graph.dijkstra_GetMinDistances(0);
         try {
             for (int i = 0; i < matriz.length; i++) {
