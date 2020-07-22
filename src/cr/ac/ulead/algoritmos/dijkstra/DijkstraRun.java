@@ -1,10 +1,13 @@
 package cr.ac.ulead.algoritmos.dijkstra;
 
+import jdk.internal.org.objectweb.asm.Handle;
+
 public class DijkstraRun {
 
     public static void main(String[] args) {
 
         int matriz[][] = {
+
                 {0, 10, 15, 0, 0, 0},
                 {0, 0, 0, 12, 0, 15},
                 {0, 0, 0, 0, 10, 0},
@@ -12,9 +15,25 @@ public class DijkstraRun {
                 {0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 5, 0}
         };
+        int vertices = matriz.length;
 
-        Dijkstra dijkstra = new Dijkstra(matriz,0);
+        Dijkstra graph = new Dijkstra(vertices);
 
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz.length; j++) {
+                if (matriz[i][j] != 0) {
+                    graph.addEdge(i, j, matriz[i][j]);
+                }
+            }
+        }
+        graph.dijkstra_GetMinDistances(0);
+        try {
+            for (int i = 0; i < matriz.length; i++) {
+                System.out.println(graph.getRecorrido(i));
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("¡Lo sentimos, ha ocurrido un error!");
+        }
     }
 }
 
@@ -23,21 +42,21 @@ public class DijkstraRun {
 //        --A at: 0
 //        --B at: 10
 //        ------------
-//        -E
+//-E
 //        --A at: 0
 //        --B at: 10
 //        --D at: 22
 //        ------------
-//        -C
+//-C
 //        --A at: 0
 //        ------------
-//        -B
+//-B
 //        --A at: 0
 //        ------------
-//        -F
+//-F
 //        --A at: 0
 //        --B at: 10
 //        --D at: 22
 //        ------------
-//        -A
+//-A
 //        ------------
