@@ -1,56 +1,79 @@
 package cr.ac.ulead.algoritmos.dijkstra;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class Dijkstra {
 
-    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
+    private static final int NO_PARENT = -1;
 
-        source.setDistance(0);
+    public Dijkstra(int[][] matriz, int i) {
 
-        Set<Node> settledNodes = new HashSet<>();
-        Set<Node> unsettledNodes = new HashSet<>();
-        unsettledNodes.add(source);
+        int n = matriz[0].length;
+        int[] shortestDistances = new int[n];
+        boolean[] added = new boolean[n];
+        for (int j = 0; j < n; j++) {
+            shortestDistances[j] = Integer.MAX_VALUE;
+            added[j] = false;
+        }
 
-        while (unsettledNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unsettledNodes);
-            unsettledNodes.remove(currentNode);
-            for (Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = adjacencyPair.getKey();
-                Integer edgeWeigh = adjacencyPair.getValue();
 
-                if (!settledNodes.contains(adjacentNode)) {
-                    CalculateMinimumDistance(adjacentNode, edgeWeigh, currentNode);
-                    unsettledNodes.add(adjacentNode);
+        shortestDistances[i] = 0;
+        int[] parents = new int[n];
+
+        parents[i] = NO_PARENT;
+        for (int t = 1; t < n; t++) {
+
+            int nearestVertex = -1;
+            int shortestDistance = Integer.MAX_VALUE;
+            for (int vertexIndex = 0; vertexIndex < n; vertexIndex++) {
+                if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance) {
+                    nearestVertex = vertexIndex;
+                    shortestDistance = shortestDistances[vertexIndex];
                 }
             }
-            settledNodes.add(currentNode);
-        }
-        return graph;
-    }
+            added[nearestVertex] = true;
 
-    private static void CalculateMinimumDistance(Node evaluationNode, Integer edgeWeigh, Node sourceNode) {
-        Integer sourceDistance = sourceNode.getDistance();
-        if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-            evaluationNode.setDistance(sourceDistance + edgeWeigh);
-            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
-            shortestPath.add(sourceNode);
-            evaluationNode.setShortestPath(shortestPath);
-        }
-    }
+            for (int vertexIndex = 0;
+                 vertexIndex < n;
+                 vertexIndex++) {
+                int edgeDistance = matriz[nearestVertex][vertexIndex];
 
-    private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
-        Node lowestDistanceNode = null;
-        int lowestDistance = Integer.MAX_VALUE;
-        for (Node node : unsettledNodes) {
-            int nodeDistance = node.getDistance();
-            if (nodeDistance < lowestDistance) {
-                lowestDistance = nodeDistance;
-                lowestDistanceNode = node;
+                if (edgeDistance > 0
+                        && ((shortestDistance + edgeDistance) <
+                        shortestDistances[vertexIndex])) {
+                    parents[vertexIndex] = nearestVertex;
+                    shortestDistances[vertexIndex] = shortestDistance +
+                            edgeDistance;
+                }
             }
         }
-        return lowestDistanceNode;
+
+        printSolution(i, shortestDistances, parents);
+    }
+
+    private void printSolution(int startVertex, int[] distances, int[] parents) {
+
+        int nVertices = distances.length;
+        System.out.print("Vertex\t Distance\tPath");
+
+        for (int vertexIndex = 0;
+             vertexIndex < nVertices;
+             vertexIndex++) {
+            if (vertexIndex != startVertex) {
+                System.out.print("\n" + startVertex + " -> ");
+                System.out.print(vertexIndex + " \t\t ");
+                System.out.print(distances[vertexIndex] + "\t\t");
+                printPath(vertexIndex, parents);
+            }
+        }
+    }
+
+    private void printPath(int currentVertex, int[] parents) {
+
+        if (currentVertex == NO_PARENT) {
+            return;
+        }
+        printPath(parents[currentVertex], parents);
+        System.out.print(currentVertex + " ");
     }
 }
+
+

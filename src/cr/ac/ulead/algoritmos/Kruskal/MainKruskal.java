@@ -20,9 +20,8 @@ public class MainKruskal {
             for (int indice = 0; indice < (E - 2); indice++) {
                 System.out.println(graph.KruskalMST(indice));
             }
-        } catch (NullPointerException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("¡Lo sentimos ha ocurrido un error!");
         }
     }
 }
-

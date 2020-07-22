@@ -38,9 +38,8 @@ public class Kruskal {
         edge = new Edge[E];
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz.length; j++) {
-                if (matriz[i][j] > 0) {
-                    edge[contadorMatrix] = new Edge(i, j, matriz[i][j]);
-                    contadorMatrix++;
+                if (matriz[i][j] != 0) {
+                    edge[contadorMatrix++] = new Edge(i, j, matriz[i][j]);
                 }
             }
         }
